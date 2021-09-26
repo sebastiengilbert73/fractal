@@ -15,15 +15,15 @@ def Transform(transformation_mtx, translation_vct, xy):
 
 def Plot(points, image_sizeHW, range_x=None, range_y=None):
     if range_x is None:
-        xs = [p[0][0] for p in points]
+        xs = [p[0] for p in points]
         range_x = (min(xs), max(xs))
     if range_y is None:
-        ys = [p[1][0] for p in points]
+        ys = [p[1] for p in points]
         range_y = (min(ys), max(ys))
     image = np.zeros((image_sizeHW[0], image_sizeHW[1], 3))
     for p in points:
-        x_pixel = round( (image_sizeHW[1] - 1) * (p[0][0] - range_x[0])/(range_x[1] - range_x[0]))
-        y_pixel = round( (image_sizeHW[0] - 1) * (p[1][0] - range_y[0]) / (range_y[1] - range_y[0]))
+        x_pixel = round( (image_sizeHW[1] - 1) * (p[0] - range_x[0])/(range_x[1] - range_x[0]))
+        y_pixel = round( (image_sizeHW[0] - 1) * (p[1] - range_y[0]) / (range_y[1] - range_y[0]))
         image[y_pixel, x_pixel] = (0, 255, 0)
     return image
 
@@ -76,12 +76,12 @@ class IterativeTransformer():
         if first_point is None:
             current_point = np.random.random((2, 1))
         else:
-            current_point = first_point
+            current_point = np.array([[first_point[0]], [first_point[1]]])
         for ptNdx in range(number_of_points + number_of_points_to_ignore):
             transformation_mtx, translation_vct = self.RandomlyChooseTransformation()
             next_point = Transform(transformation_mtx, translation_vct, current_point)
             if ptNdx >= number_of_points_to_ignore:
-                generated_points.append(next_point)
+                generated_points.append((next_point[0][0], next_point[1][0]))
             current_point = next_point
         return generated_points
 

@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 import string
 import random
 
@@ -27,7 +26,7 @@ def Plot(points, image_sizeHW=None, image=None, range_x=None, range_y=None):
         image_sizeHW = (image.shape[0], image.shape[1])
     for p in points:
         x_pixel = round( (image_sizeHW[1] - 1) * (p[0] - range_x[0])/(range_x[1] - range_x[0]))
-        y_pixel = round( (image_sizeHW[0] - 1) * (p[1] - range_y[0]) / (range_y[1] - range_y[0]))
+        y_pixel = round( (image_sizeHW[0] - 1) - (image_sizeHW[0] - 1) * (p[1] - range_y[0]) / (range_y[1] - range_y[0]))
         if x_pixel >= 0 and x_pixel < image_sizeHW[1] and y_pixel >= 0 and y_pixel < image_sizeHW[0]:
             image[y_pixel, x_pixel] = (0, 255, 0)
     return image

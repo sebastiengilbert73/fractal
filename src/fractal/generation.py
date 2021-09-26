@@ -13,18 +13,23 @@ def Transform(transformation_mtx, translation_vct, xy):
         raise ValueError("Transform(): xy.shape ({}) != (2, 1)".format(xy.shape))
     return transformation_mtx @ xy + translation_vct
 
-def Plot(points, image_sizeHW, range_x=None, range_y=None):
+def Plot(points, image_sizeHW=None, image=None, range_x=None, range_y=None):
+
     if range_x is None:
         xs = [p[0] for p in points]
         range_x = (min(xs), max(xs))
     if range_y is None:
         ys = [p[1] for p in points]
         range_y = (min(ys), max(ys))
-    image = np.zeros((image_sizeHW[0], image_sizeHW[1], 3))
+    if image is None:
+        image = np.zeros((image_sizeHW[0], image_sizeHW[1], 3))
+    else:
+        image_sizeHW = (image.shape[0], image.shape[1])
     for p in points:
         x_pixel = round( (image_sizeHW[1] - 1) * (p[0] - range_x[0])/(range_x[1] - range_x[0]))
         y_pixel = round( (image_sizeHW[0] - 1) * (p[1] - range_y[0]) / (range_y[1] - range_y[0]))
-        image[y_pixel, x_pixel] = (0, 255, 0)
+        if x_pixel >= 0 and x_pixel < image_sizeHW[1] and y_pixel >= 0 and y_pixel < image_sizeHW[0]:
+            image[y_pixel, x_pixel] = (0, 255, 0)
     return image
 
 class IterativeTransformer():
